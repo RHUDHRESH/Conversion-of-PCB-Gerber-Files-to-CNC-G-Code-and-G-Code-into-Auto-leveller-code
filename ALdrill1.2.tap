@@ -1,0 +1,91 @@
+(AutoLeveller, Version: 0.7.7, http://autoleveller.co.uk)
+(Copyright 2013 James Hawthorne PhD)
+(Original file: drill1.2.txt)
+(Creation date: 23/10/2025 time: 09:42)
+
+(This program and any of its output is licensed under GPLv2 and as such...)
+(AutoLeveller comes with ABSOLUTELY NO WARRANTY; for details, see sections 11 and 12 of the GPLv2)
+
+(prerequisites)
+(1. need a working probe)
+(2. tool needs to be within 10mm of copper board for the 1st probe, )
+(i.e. Z0.000 should be no more than 10mm above the board initially)
+(Note: The first probe will touch off Z to 0.000 when it first touches to copper, )
+(all other probe values are relative to this first point)
+
+G21 (millimeters)
+G90 (absolute distance mode, not incremental)
+
+(begin initial probe and set Z to 0)
+G0 X0 Y0 Z0
+G31 Z-10 F100
+G92 Z0
+G0 Z2
+G31 Z-1 F50
+G92 Z0
+G0 Z2
+G0 X0 Y0
+G31 Z-1 F100
+#500=#2002
+G0 Z2
+G0 X10.1605 Y0
+G31 Z-1 F100
+#501=#2002
+G0 Z2
+G0 X20.321 Y0
+G31 Z-1 F100
+#502=#2002
+G0 Z2
+G0 X20.321 Y10.37
+G31 Z-1 F100
+#505=#2002
+G0 Z2
+G0 X10.1605 Y10.37
+G31 Z-1 F100
+#504=#2002
+G0 Z2
+G0 X0 Y10.37
+G31 Z-1 F100
+#503=#2002
+G0 Z2
+G0 X0 Y0 Z20
+(Set S value to ensure Speed has a value otherwise the spindle will not start on an M3 command)
+S20000
+
+(The program will pause to allow the probe to be detached)
+(press cycle start to resume from current line)
+M0
+
+
+(The original mill file is now rewritten with z depth replaced with a)
+(bilinear interpolated value based on the initial probing)
+
+%
+( CopperCAM - 29/07/2019 / ISO-Mill Output )
+( C:\COPPERCAM2\CopperCAM.iso created 19/09/2025 at 16:19 )
+( Workpiece dimensions: 32.69 x 27.93 x 0.1 mm )
+G21 G40 G54
+G80 G90 G94
+( Tool #4 "Basic Drill" / Diameter 1.2 mm )
+T4 M6
+M3 S12000
+M7
+G0 X20.321 Y7.83
+G0 Z0
+#102=[#501+0.75506*#504-0.75506*#501]
+#101=[#502+0.75506*#505-0.75506*#502]
+#100=[#102+1*#101-1*#102]
+G1 F60 Z[#100 + -1.7]
+G0 Z2
+G0 Y10.37
+G0 Z0
+#102=[#504+0*#505-0*#504]
+#101=#505
+#100=[#102+1*#101-1*#102]
+G1 F60 Z[#100 + -1.7]
+G0 Z2
+M9
+M5
+M2
+%
+
